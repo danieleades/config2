@@ -76,15 +76,27 @@ impl<'a> Data<'a> {
         self.fields.iter().map(build_call)
     }
 
+    fn from_fields(&self) -> impl Iterator<Item = TokenStream2> + 'a {
+        self.fields.iter().map(|field| {
+            let name = field.ident.as_ref().unwrap();
+            quote! {
+                #name: value.#name.into(),
+            }
+        })
+    }
+
     fn from_impl_block(&self) -> TokenStream2 {
         let name = self.name;
         let partial_name = self.partial_name();
         let generics = self.generics;
+        let fields = self.from_fields();
 
         quote! {
             impl #generics From<#name #generics> for #partial_name #generics {
-                fn from(x: #name #generics) -> Self {
-                    todo!()
+                fn from(value: #name #generics) -> Self {
+                    Self {
+                        #(#fields)*
+                    }
                 }
             }
         }
