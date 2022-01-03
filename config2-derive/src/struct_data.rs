@@ -2,16 +2,24 @@ use proc_macro2::TokenStream as TokenStream2;
 use quote::{format_ident, quote};
 use syn::{
     parse::{Parse, Parser},
-    DeriveInput, Field, Type,
+    Field, Type,
 };
 
 pub struct Data<'a> {
-    pub name: &'a syn::Ident,
-    pub generics: &'a syn::Generics,
-    pub fields: &'a syn::Fields,
+    name: &'a syn::Ident,
+    generics: &'a syn::Generics,
+    fields: &'a syn::Fields,
 }
 
 impl<'a> Data<'a> {
+    pub fn new(name: &'a syn::Ident, generics: &'a syn::Generics, fields: &'a syn::Fields) -> Self {
+        Self {
+            name,
+            generics,
+            fields,
+        }
+    }
+
     fn partial_name(&self) -> syn::Ident {
         format_ident!("Partial{}", self.name)
     }
@@ -113,24 +121,6 @@ impl<'a> Data<'a> {
             #layered_impl_block
             #partial_impl_block
             #from_impl
-        }
-    }
-}
-
-impl<'a> From<&'a DeriveInput> for Data<'a> {
-    fn from(ast: &'a DeriveInput) -> Self {
-        let name = &ast.ident;
-        let generics = &ast.generics;
-
-        let fields = match &ast.data {
-            syn::Data::Struct(data) => &data.fields,
-            _ => panic!("'Layered' can only be derived for structs"),
-        };
-
-        Self {
-            name,
-            generics,
-            fields,
         }
     }
 }
