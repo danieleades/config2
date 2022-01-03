@@ -1,6 +1,10 @@
-//! A framework for layered config for applications.
-
-#![deny(clippy::all, missing_debug_implementations, missing_docs)]
+#![doc = include_str!("../README.md")]
+#![deny(
+    clippy::all,
+    missing_debug_implementations,
+    missing_docs,
+    clippy::cargo
+)]
 #![warn(clippy::pedantic)]
 
 use serde::de::DeserializeOwned;
@@ -11,7 +15,10 @@ pub mod source;
 pub use config2_derive::Layered;
 
 /// A [`Partial`] struct is a version of a [`Layered`] struct for which all its
-/// fields are optional
+/// fields are optional.
+///
+/// In general this should not need to be implemented manually, and is generated
+/// by the [`Layered`] derive macro.
 pub trait Partial: Sized + Default + From<Self::T> + DeserializeOwned {
     /// The [`Layered`] struct which corresponds to this [`Partial`] struct
     type T;

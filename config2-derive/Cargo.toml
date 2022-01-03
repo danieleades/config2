@@ -2,6 +2,11 @@
 name = "config2_derive"
 version = "0.1.0"
 edition = "2021"
+description = "derive macro for the 'config2' crate"
+license = "Apache-2.0"
+repository = "https://github.com/danieleades/config2"
+categories = ["config"]
+keywords = ["config", "configuration", "derive", "layered", "12 factor"]
 
 [lib]
 proc-macro = true
