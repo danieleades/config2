@@ -1,6 +1,3 @@
-#![deny(clippy::all, missing_debug_implementations, missing_docs)]
-#![warn(clippy::pedantic)]
-
 use config2::{source, Layered};
 
 #[derive(Debug, Layered)]

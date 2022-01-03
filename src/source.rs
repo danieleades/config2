@@ -1,5 +1,9 @@
 //! Configuration [`Source`]s
 
+#[cfg(feature = "env")]
+mod env;
+#[cfg(feature = "env")]
+pub use env::Env;
 pub mod file;
 
 use crate::Layered;
