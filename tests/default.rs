@@ -3,7 +3,7 @@
 
 use config2::{source, Layered};
 
-#[derive(Debug, Layered)]
+#[derive(Debug, Default, Layered)]
 struct Test {
     field_a: i32,
     field_b: String,
@@ -17,6 +17,7 @@ fn main() -> anyhow::Result<()> {
         .join("tests/config/test.toml");
 
     let _config = Test::builder()
+        .with_default()
         .with_source(&source::file::Toml::new(&toml_file))?
         .build()
         .unwrap();

@@ -37,8 +37,8 @@ impl Partial for PartialConfig {
 impl From<Config> for PartialConfig {
     fn from(config: Config) -> Self {
         Self {
-            field_a: config.field_a,
-            field_b: Some(config.field_b),
+            field_a: config.field_a.into(),
+            field_b: config.field_b.into(),
         }
     }
 }
