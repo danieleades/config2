@@ -27,7 +27,7 @@ impl<'a> Data<'a> {
         let fields = self.optional_fields();
 
         quote! {
-            #[derive(Debug, Default)]
+            #[derive(Debug, Default, config2::__private::serde_derive::Deserialize)]
             struct #name #generics {
                 #(#fields,)*
             }
@@ -50,14 +50,30 @@ impl<'a> Data<'a> {
         let name = self.name;
         let partial_name = self.partial_name();
         let generics = self.generics;
+        let merge_fields = self.merge_fields();
+        let build_fields = self.build_fields();
 
         quote! {
             impl #generics config2::Partial for #partial_name #generics {
                 type T = #name #generics;
-                fn merge(&mut self, other: Self) { todo!() }
-                fn try_build(self) -> Result<<Self as config2::Partial>::T, config2::Error> { todo!() }
+                fn merge(&mut self, other: Self) { #(#merge_fields)* }
+                fn build(self) -> Result<<Self as config2::Partial>::T, config2::Error> {
+                    Ok(
+                        Self::T {
+                            #(#build_fields)*
+                        }
+                    )
+                }
             }
         }
+    }
+
+    fn merge_fields(&self) -> impl Iterator<Item = TokenStream2> + 'a {
+        self.fields.iter().map(merge_call)
+    }
+
+    fn build_fields(&self) -> impl Iterator<Item = TokenStream2> + 'a {
+        self.fields.iter().map(build_call)
     }
 
     fn from_impl_block(&self) -> TokenStream2 {
@@ -132,6 +148,22 @@ fn transform_field(field: &Field) -> TokenStream2 {
         new_field.ty = new_ty;
 
         quote! {#new_field}
+    }
+}
+
+fn merge_call(field: &Field) -> TokenStream2 {
+    let name = field.ident.as_ref().unwrap();
+
+    quote! {self.#name.merge(other.#name);}
+}
+
+fn build_call(field: &Field) -> TokenStream2 {
+    let name = field.ident.as_ref().unwrap();
+
+    if is_option(&field.ty) {
+        quote! {#name: self.#name.build().ok(),}
+    } else {
+        quote! {#name: self.#name.build()?,}
     }
 }
 
