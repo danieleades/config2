@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 use config2::{source, Layered};
 
-#[derive(Debug, Default, Layered)]
+#[derive(Debug, Layered)]
 struct Test {
     field_a: i32,
     field_b: String,
@@ -10,9 +10,12 @@ struct Test {
 
 #[test]
 fn main() -> anyhow::Result<()> {
+    let toml_file = std::env::current_dir()
+        .unwrap()
+        .join("tests/config/test.toml");
+
     let _config = Test::builder()
-        .with_default()
-        .with_source(source::File)?
+        .with_source(&source::file::Toml::new(&toml_file))?
         .build()
         .unwrap();
 

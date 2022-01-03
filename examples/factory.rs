@@ -2,6 +2,7 @@
 
 use anyhow::Result;
 use config2::{source, Error, Layered, Partial};
+use serde::Deserialize;
 
 #[derive(Debug)]
 struct Config {
@@ -13,7 +14,7 @@ impl Layered for Config {
     type Layer = PartialConfig;
 }
 
-#[derive(Default)]
+#[derive(Default, Deserialize)]
 struct PartialConfig {
     field_a: Option<i32>,
     field_b: Option<String>,
@@ -26,7 +27,7 @@ impl Partial for PartialConfig {
         todo!()
     }
 
-    fn try_build(self) -> Result<Self::T, Error> {
+    fn build(self) -> Result<Self::T, Error> {
         todo!()
     }
 }
@@ -41,7 +42,9 @@ impl From<Config> for PartialConfig {
 }
 
 fn config_factory() -> anyhow::Result<Config> {
-    Ok(Config::builder().with_source(source::File)?.build()?)
+    Ok(Config::builder()
+        .with_source(&source::file::Toml::new("unimplimented"))?
+        .build()?)
 }
 
 fn main() -> Result<()> {
