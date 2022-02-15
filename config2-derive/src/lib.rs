@@ -1,6 +1,6 @@
 //! Provides the derive macro for the `config2` crate
 
-#![deny(clippy::all, missing_debug_implementations)]
+#![deny(clippy::all, missing_debug_implementations, clippy::cargo)]
 #![warn(clippy::pedantic)]
 #![allow(clippy::missing_panics_doc)]
 
