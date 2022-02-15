@@ -3,7 +3,7 @@ prototype inspired by the excellent [config-rs](https://github.com/mehcode/confi
 
 This crate provides a mechanism for layered config, whereby multiple sources of configuration can be combined in order of precedence to provide application configuration.
 
-Compared to [config-rs](https://github.com/mehcode/config-rs), [config2](https://github.com/danieleades/config2) is strongly-typed. It relies on some macro magic rather than use a loosely-typed approach.
+Compared to [config-rs](https://github.com/mehcode/config-rs), [config2](https://github.com/danieleades/config2) is strongly-typed. It relies on some macro magic rather than using a loosely-typed approach.
 
 Each source of configuration need not provide a valid configuration alone, so long as between them they provide a valid configuration.
 
