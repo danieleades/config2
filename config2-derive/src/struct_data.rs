@@ -84,6 +84,7 @@ impl<'a> Data<'a> {
         self.fields.iter().map(build_call)
     }
 
+    #[allow(clippy::wrong_self_convention)]
     fn from_fields(&self) -> impl Iterator<Item = TokenStream2> + 'a {
         self.fields.iter().map(|field| {
             let name = field.ident.as_ref().unwrap();
@@ -93,6 +94,7 @@ impl<'a> Data<'a> {
         })
     }
 
+    #[allow(clippy::wrong_self_convention)]
     fn from_impl_block(&self) -> TokenStream2 {
         let name = self.name;
         let partial_name = self.partial_name();
