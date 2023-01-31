@@ -22,7 +22,7 @@ config2_derive = { path = "./config2-derive" }
 envy = { version = "0.4.2", optional = true }
 serde = { version = "1.0.133", features = ["derive"] }
 thiserror = "1.0.30"
-toml = "0.5.8"
+toml = "0.7.1"
 
 [dev-dependencies]
 anyhow = "1.0.52"
